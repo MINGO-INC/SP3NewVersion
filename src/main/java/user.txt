@@ -1,0 +1,9 @@
+a,d
+g,h
+Mingo,Flamingo
+h,g
+j,o
+g,w
+g,f
+a,d
+f,c
