@@ -7,12 +7,11 @@ public class Main {
         User user = new User("John Doe");
         FileIO fileIO = new FileIO();
         ArrayList<Media> movieData = fileIO.readFile("/Users/mingo/Documents/GitHub/SP3/SP3NewVersion/src/main/java/100bedstefilm.txt");
-       // System.out.println(movieData);
+        // System.out.println(movieData);
 
         StreamingService streamingService=new StreamingService();
         streamingService.ConsoleLogin();
-
-
+        System.out.println(user.watchList.get(0));
 
     }
 }

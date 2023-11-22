@@ -9,11 +9,12 @@ import java.util.Scanner;
 
 public class StreamingService {
  private static FileIO fileIO = new FileIO();
+private List<Media> medias;
 // Media media=new Media();
   private static ArrayList<Media> movieData = fileIO.readFile("/Users/mingo/Documents/GitHub/SP3/SP3NewVersion/src/main/java/100bedstefilm.txt");
-  
 
-    private static final String fileName = "/Users/mingo/Documents/GitHub/SP3/SP3NewVersion/src/main/java/user.txt";
+
+    private static  String fileName = "/Users/mingo/Documents/GitHub/SP3/SP3NewVersion/src/main/java/user.txt";
 
     public void ConsoleLogin() {
         Scanner scanner = new Scanner(System.in);
@@ -97,18 +98,17 @@ public class StreamingService {
 
     private static void displayMenu() {
         User user = new User("james");
-        //todo lave de 3 options af alle film...
         Scanner scan = new Scanner(System.in);
         while (true) {
             System.out.println("1. see all movies");
-            System.out.println("2. Choose a Genre");
-            System.out.println("3. Search for a movie");
-            System.out.println("4. See personal list");
-            System.out.println("5. see watched media");
+            System.out.println("2. Pick a movie");
+            System.out.println("3. Pick a series");
+            System.out.println("4. Show watch list");
+            System.out.println("5. Show saved media");
             System.out.println("6. logout");
             System.out.print("Choose an option: ");
             int choice = scan.nextInt();
-
+            scan.nextLine();
             switch (choice) {
                 case 1:
                     for (Media movies: movieData) {
@@ -116,78 +116,28 @@ public class StreamingService {
                     }
                     break;
                 case 2:
-                    displayAddToListMenu(scan);
+                    addMovieToList(scan,user);
                     break;
                 case 3:
-                    int addCategoryID = 1;
-                    //Runs through our List of categories and gives them a number to choose from
-                    for (Media s : movieData) {
-                        System.out.println((addCategoryID + ": " + s));
-                        addCategoryID++;
-                    }
-                    pickAMovie();
-                case 4:
 
+                    break;
+                case 4:
+                    System.out.println(user.watchList);
 
                     break;
                 case 5:
-
+                    System.out.println(user.saveMedia);
                     break;
                 case 6:
                     System.out.println("Exiting the program. Goodbye!");
                     System.exit(0);
                 default:
-                    System.out.println("Invalid choice. Please try again.");
-            }
-
-
-        }
-    }
-    private static void pickAMovie() {
-        String input;
-        boolean input1 = true;
-        while (input1) {
-            input = getInput("which movie would you like to Choose, use the numbers shown left of the move to pick.");
-            if (input.equalsIgnoreCase("x")) {
-                displayMenu();
-                input1=false;
-                return;
-            }
-            try {
-                int selectedmovie = Integer.parseInt(input);
-                if(selectedmovie >= 1 && selectedmovie <=1){
-
-                }
-               /* for (Media movie : movieData) {
-                    if (movie.getNumber() == selectedmovie) {
-                        System.out.println(("The following have been chosen: " + movie));
-                       movieOption(movie);
-                        input1 = true;
-                        break;
-                    }
-                }*/
-            } catch (NumberFormatException e) {
-                System.out.println("invalid input");
-            }
-        }
-    }
-    public static void movieOption(Media m){
-        System.out.println("");
-        getInput("you now have 3 options: \n" +
-                "1) Start movie \n" +
-                "2) Add movie to saved list\n" +
-                "3) Go back to main Menu.");
-        boolean choice=true;
-        while(choice){
-            String input="";
-            if(input.equals(1)){
-
-
+                    System.out.println("Invalid choice. try again.");
             }
         }
     }
     public void playMovie(){
-        System.out.println("current move is playing "+ "");
+        System.out.println("current movie is playing "+ "");
     }
 
     public static String getInput(String msg) {
@@ -196,79 +146,56 @@ public class StreamingService {
         String input = scan.nextLine();
         return input;
     }
-    private static User currentUser;
-
-    private static void addToUserList(Media media, List<Media> list) {
-        if (currentUser != null) {
-            list.add(media);
-            System.out.println("Added '" + media.getTitle() + "' to the list.");
-        } else {
-            System.out.println("User not logged in. Please log in to perform this action.");
-        }
-    }
-
-    private static List<Media> loadAvailableMovies(String fileName) {
-        FileIO fileIO = new FileIO();
-        return fileIO.readFile(fileName);
-    }
-
-    private static void displayAddToListMenu(Scanner scanner) {
-        System.out.println("Select a list to add the movie:");
-        System.out.println("1. Watched List");
-        System.out.println("2. Saved List");
-
-        int choice = getIntegerInput(scanner, "Choose an option:");
-
-        switch (choice) {
-            case 1:
-                addToUserList(getUserChoice(scanner, loadAvailableMovies(fileName)), currentUser.getWatchList());
-                break;
-            case 2:
-                addToUserList(getUserChoice(scanner, loadAvailableMovies(fileName)), currentUser.getSaveMedia());
-                break;
-            default:
-                System.out.println("Invalid choice. Please try again.");
-        }
-    }
-
-    private static int getIntegerInput(Scanner scanner, String prompt) {
-        System.out.print(prompt + " ");
-        while (!scanner.hasNextInt()) {
-            System.out.println("Invalid input. Please enter a number.");
-            scanner.nextLine(); // Consume the invalid input
-        }
-        int input = scanner.nextInt();
-        scanner.nextLine(); // Consume the newline character
-        return input;
-    }
-
-    private static Media getUserChoice(Scanner scanner, List<Media> availableMovies) {
-        System.out.println("Available movies: ");
-        for (int i = 0; i < availableMovies.size(); i++) {
-            System.out.println((i + 1) + ". " + availableMovies.get(i).getTitle());
+    private static void addMovieToList(Scanner scanner, User user) {
+        // Display available movies or get the selected movie from your data
+        System.out.println("Select a movie to add to your list:");
+        for (Media movie : movieData) {
+            System.out.println(movie.getTitle()); // Assuming Media class has getTitle() method
         }
 
-        System.out.print("Enter the number of the movie you want to add: ");
-        int userChoiceIndex;
+        System.out.print("Enter the title of the movie you want to add: ");
+        String selectedMovieTitle = scanner.nextLine();
 
-        try {
-            userChoiceIndex = scanner.nextInt();
+        // Find the selected movie from the data
+        Media selectedMovie = findMovieByTitle(selectedMovieTitle);
+
+        // Check if the movie is found
+        if (selectedMovie != null) {
+            // Prompt the user to choose which list to add the movie to
+            System.out.println("Select a list to add the movie to:");
+            System.out.println("1. Watch List");
+            System.out.println("2. Saved Media List");
+            System.out.print("Enter the number of the list: ");
+
+            int listChoice = scanner.nextInt();
             scanner.nextLine(); // Consume the newline character
-        } catch (InputMismatchException e) {
-            System.out.println("Invalid input. Please enter a number.");
-            scanner.nextLine(); // Consume the invalid input
-            return getUserChoice(scanner, availableMovies);
-        }
 
-        int adjustedIndex = userChoiceIndex - 1;
-
-        if (adjustedIndex >= 0 && adjustedIndex < availableMovies.size()) {
-            return availableMovies.get(adjustedIndex);
+            // Add the movie to the selected list
+            switch (listChoice) {
+                case 1:
+                    user.addMediaToWatchList(selectedMovie);
+                    break;
+                case 2:
+                    user.saveMedia(selectedMovie);
+                    System.out.println("Added '" + selectedMovie.getTitle() + "' to your saved media list.");
+                    break;
+                default:
+                    System.out.println("Invalid choice. Movie not added to any list.");
+            }
         } else {
-            System.out.println("Invalid choice. Please try again.");
-            return getUserChoice(scanner, availableMovies);
+            System.out.println("Movie not found.");
         }
     }
 
+
+    private static Media findMovieByTitle(String title) {
+        // Implement a method to find the movie by title in your movieData
+        for (Media movie : movieData) {
+            if (movie.getTitle().equalsIgnoreCase(title)) {
+                return movie;
+            }
+        }
+        return null;
+    }
 
 }

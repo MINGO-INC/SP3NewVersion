@@ -43,6 +43,9 @@ private String name;
     public ArrayList<Media> getAllMedia() {
         return allMedia;
     }
-
+    public void addMediaToWatchList(Media media) {
+        watchList.add(media);
+        System.out.println("Added '" + media.getTitle() + "' to your watch list.");
+    }
 
 }

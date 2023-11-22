@@ -2,13 +2,20 @@ import java.util.ArrayList;
 public class Series extends Media{
 
     private int totalSeasons;
+    private int totalEpisodes;
 
-    public Series(String title, String releaseDate, ArrayList<String> genres, String rating, int totalSeasons) {
+    private Series(String title, String releaseDate, ArrayList<String> genres, String rating, int totalSeasons, int totalEpisodes) {
         super(title, releaseDate, genres, rating);
         this.totalSeasons = totalSeasons;
+        this.totalEpisodes = totalEpisodes;
     }
 
-    public int getTotalSeasons() {
+    private int getTotalEpisodes(){
+        return totalEpisodes;
+
+    }
+
+    private int getTotalSeasons() {
         return totalSeasons;
     }
 
@@ -20,6 +27,7 @@ public class Series extends Media{
                 ", releaseDate='" + getReleasDate() + '\'' +
                 ", rating=" + getRating() +
                 ", totalSeasons=" + totalSeasons +
+                 ", totalEpisodes=" + totalEpisodes +
                 '}';
     }
 }
