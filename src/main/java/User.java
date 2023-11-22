@@ -33,5 +33,16 @@ private String name;
         return name;
 
     }
+    public ArrayList<Media> getWatchList() {
+        return watchList;
+    }
+    public ArrayList<Media> getSaveMedia() {
+        return saveMedia;
+    }
+
+    public ArrayList<Media> getAllMedia() {
+        return allMedia;
+    }
+
 
 }

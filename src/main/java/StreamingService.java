@@ -3,12 +3,15 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.InputMismatchException;
+import java.util.List;
 import java.util.Scanner;
 
 public class StreamingService {
  private static FileIO fileIO = new FileIO();
+// Media media=new Media();
   private static ArrayList<Media> movieData = fileIO.readFile("/Users/mingo/Documents/GitHub/SP3/SP3NewVersion/src/main/java/100bedstefilm.txt");
-
+  
 
     private static final String fileName = "/Users/mingo/Documents/GitHub/SP3/SP3NewVersion/src/main/java/user.txt";
 
@@ -86,7 +89,6 @@ public class StreamingService {
     }
 
     private static void saveRegistration(String username, String password) {
-        // Save the registration information to a file (insecure for demo purposes)
         try (FileWriter writer = new FileWriter(fileName, true)) {
             writer.write(username + "," + password + "\n");
         } catch (IOException e) {
@@ -106,6 +108,7 @@ public class StreamingService {
             System.out.println("6. logout");
             System.out.print("Choose an option: ");
             int choice = scan.nextInt();
+
             switch (choice) {
                 case 1:
                     for (Media movies: movieData) {
@@ -113,16 +116,16 @@ public class StreamingService {
                     }
                     break;
                 case 2:
+                    displayAddToListMenu(scan);
+                    break;
+                case 3:
                     int addCategoryID = 1;
                     //Runs through our List of categories and gives them a number to choose from
                     for (Media s : movieData) {
                         System.out.println((addCategoryID + ": " + s));
                         addCategoryID++;
                     }
-                    pickAmovie();
-                    break;
-                case 3:
-                    System.exit(0);
+                    pickAMovie();
                 case 4:
 
 
@@ -140,25 +143,29 @@ public class StreamingService {
 
         }
     }
-    private static void pickAmovie() {
+    private static void pickAMovie() {
         String input;
-        boolean input1 = false;
-        while (!input1) {
+        boolean input1 = true;
+        while (input1) {
             input = getInput("which movie would you like to Choose, use the numbers shown left of the move to pick.");
             if (input.equalsIgnoreCase("x")) {
                 displayMenu();
+                input1=false;
                 return;
             }
             try {
-                int selectedId = Integer.parseInt(input);
-                for (Media movie : movieData) {
-                    if (movie.getNumber() == selectedId) {
+                int selectedmovie = Integer.parseInt(input);
+                if(selectedmovie >= 1 && selectedmovie <=1){
+
+                }
+               /* for (Media movie : movieData) {
+                    if (movie.getNumber() == selectedmovie) {
                         System.out.println(("The following have been chosen: " + movie));
                        movieOption(movie);
                         input1 = true;
                         break;
                     }
-                }
+                }*/
             } catch (NumberFormatException e) {
                 System.out.println("invalid input");
             }
@@ -166,17 +173,21 @@ public class StreamingService {
     }
     public static void movieOption(Media m){
         System.out.println("");
-        getInput("you now have 3 options: \n1) Start movie \n2) Add movie to saved list\n3) Go back to main Menu.");
+        getInput("you now have 3 options: \n" +
+                "1) Start movie \n" +
+                "2) Add movie to saved list\n" +
+                "3) Go back to main Menu.");
         boolean choice=true;
         while(choice){
             String input="";
             if(input.equals(1)){
-                
+
+
             }
         }
-
-
-
+    }
+    public void playMovie(){
+        System.out.println("current move is playing "+ "");
     }
 
     public static String getInput(String msg) {
@@ -185,5 +196,79 @@ public class StreamingService {
         String input = scan.nextLine();
         return input;
     }
+    private static User currentUser;
+
+    private static void addToUserList(Media media, List<Media> list) {
+        if (currentUser != null) {
+            list.add(media);
+            System.out.println("Added '" + media.getTitle() + "' to the list.");
+        } else {
+            System.out.println("User not logged in. Please log in to perform this action.");
+        }
+    }
+
+    private static List<Media> loadAvailableMovies(String fileName) {
+        FileIO fileIO = new FileIO();
+        return fileIO.readFile(fileName);
+    }
+
+    private static void displayAddToListMenu(Scanner scanner) {
+        System.out.println("Select a list to add the movie:");
+        System.out.println("1. Watched List");
+        System.out.println("2. Saved List");
+
+        int choice = getIntegerInput(scanner, "Choose an option:");
+
+        switch (choice) {
+            case 1:
+                addToUserList(getUserChoice(scanner, loadAvailableMovies(fileName)), currentUser.getWatchList());
+                break;
+            case 2:
+                addToUserList(getUserChoice(scanner, loadAvailableMovies(fileName)), currentUser.getSaveMedia());
+                break;
+            default:
+                System.out.println("Invalid choice. Please try again.");
+        }
+    }
+
+    private static int getIntegerInput(Scanner scanner, String prompt) {
+        System.out.print(prompt + " ");
+        while (!scanner.hasNextInt()) {
+            System.out.println("Invalid input. Please enter a number.");
+            scanner.nextLine(); // Consume the invalid input
+        }
+        int input = scanner.nextInt();
+        scanner.nextLine(); // Consume the newline character
+        return input;
+    }
+
+    private static Media getUserChoice(Scanner scanner, List<Media> availableMovies) {
+        System.out.println("Available movies: ");
+        for (int i = 0; i < availableMovies.size(); i++) {
+            System.out.println((i + 1) + ". " + availableMovies.get(i).getTitle());
+        }
+
+        System.out.print("Enter the number of the movie you want to add: ");
+        int userChoiceIndex;
+
+        try {
+            userChoiceIndex = scanner.nextInt();
+            scanner.nextLine(); // Consume the newline character
+        } catch (InputMismatchException e) {
+            System.out.println("Invalid input. Please enter a number.");
+            scanner.nextLine(); // Consume the invalid input
+            return getUserChoice(scanner, availableMovies);
+        }
+
+        int adjustedIndex = userChoiceIndex - 1;
+
+        if (adjustedIndex >= 0 && adjustedIndex < availableMovies.size()) {
+            return availableMovies.get(adjustedIndex);
+        } else {
+            System.out.println("Invalid choice. Please try again.");
+            return getUserChoice(scanner, availableMovies);
+        }
+    }
+
 
 }
