@@ -13,7 +13,7 @@ private List<Media> medias;
   private static ArrayList<Media> seriesData = fileIO.readFile("/Users/mingo/Documents/GitHub/SP3/SP3NewVersion/src/main/java/100bedsteserier.txt","series");
 
     private static  String fileName = "/Users/mingo/Documents/GitHub/SP3/SP3NewVersion/src/main/java/user.txt";// til login
-    private static  String personalList = "";// til login
+    private static  String personalList = "/Users/mingo/Documents/GitHub/SP3/SP3NewVersion/src/main/java/PersonalList.txt";
 
     public void ConsoleLogin() {
 
@@ -93,6 +93,14 @@ private List<Media> medias;
         } catch (IOException e) {
         }
     }
+    private static void savePrivateList(Media list){
+        try(FileWriter writer = new FileWriter(personalList,true)){
+        writer.write(String.valueOf(list));
+
+        }catch(IOException e){
+
+        }
+    }
 
     private static void displayMenu() {
         User user = new User("");
@@ -149,6 +157,7 @@ private List<Media> medias;
     }
     private static void addMediaToList(Scanner scanner, User user) {
         // Display available movies or get the selected movie from your data
+        //todo lav den her del af koden til en if statement.
         System.out.println("Select a movie or series to add to your list:");
         for (Media movie : movieData) {
             System.out.println(movie.getTitle());
@@ -166,7 +175,7 @@ private List<Media> medias;
         Media selectedSeries = findSeriesByTitle(selectedSeriesTitle);
 
         // Check if the movie is found
-        if (selectedMovie != null || selectedSeries!=null) {
+        if (selectedMovie != null && selectedSeries!=null) {
             // have the user to choose which list to add the movie to
             System.out.println("Select a list to add the media to:");
             System.out.println("1. Watch List");
@@ -183,11 +192,11 @@ private List<Media> medias;
                     //user.addMediaToWatchList(selectedSeries);
                     break;
                 case 2:
+
                     user.saveMedia(selectedMovie);
                     user.saveMedia(selectedSeries);
                     if(user.equals(selectedMovie)){
                         System.out.println("Added '" + selectedMovie.getTitle() + "' to your saved media list.");
-                        break;
                     }else {
                         System.out.println("Added '" + selectedSeries.getTitle() + "' to your saved media list.");
                         break;
@@ -219,4 +228,5 @@ private List<Media> medias;
         }
         return null;
     }
+
 }

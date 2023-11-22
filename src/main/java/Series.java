@@ -21,7 +21,7 @@ public class Series extends Media{
 
     @Override
     public String toString() {
-        return getTitle() + ", " + getReleasDate() + ", " + "categories: " + showCategories() +", Rating.  " + getRating()+totalSeasons+totalEpisodes;
+        return getTitle() + ", " + getReleasDate() + ", " + "categories: " + showCategories() +", Rating.  " + getRating()+totalSeasons;
 
     }
 }

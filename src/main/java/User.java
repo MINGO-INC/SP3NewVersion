@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.List;
 
 public class User {
 private String name;
@@ -51,5 +52,11 @@ private String name;
         }else{
             System.out.println("Added '" + series.getTitle() + "' to your watch list.");
         }
+    }
+
+    private List<Media> saveMediaList;
+
+    public List<Media> getSaveMediaList() {
+        return saveMediaList;
     }
 }
