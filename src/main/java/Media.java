@@ -5,16 +5,14 @@ public class Media {
     private ArrayList<String> genres=new ArrayList<>();
     private String releasDate;
     private String rating;
-    private int number;
     Media(String title, String releasDate,ArrayList<String> genres,String rating){
         this.title=title;
         this.releasDate=releasDate;
         this.genres=genres;
         this.rating=rating;
     }
-public int getNumber(){
-        return number;
-}
+
+
     public String getTitle() {
         return title;
     }

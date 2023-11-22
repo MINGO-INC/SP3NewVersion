@@ -1,10 +1,2 @@
-a,d
-g,h
+League,legends
 Mingo,Flamingo
-h,g
-j,o
-g,w
-g,f
-a,d
-f,c
-a,h

@@ -3,20 +3,20 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
 public class StreamingService {
  private static FileIO fileIO = new FileIO();
 private List<Media> medias;
-// Media media=new Media();
-  private static ArrayList<Media> movieData = fileIO.readFile("/Users/mingo/Documents/GitHub/SP3/SP3NewVersion/src/main/java/100bedstefilm.txt");
+  private static ArrayList<Media> movieData = fileIO.readFile("/Users/mingo/Documents/GitHub/SP3/SP3NewVersion/src/main/java/100bedstefilm.txt","movie");
+  private static ArrayList<Media> seriesData = fileIO.readFile("/Users/mingo/Documents/GitHub/SP3/SP3NewVersion/src/main/java/100bedsteserier.txt","series");
 
-
-    private static  String fileName = "/Users/mingo/Documents/GitHub/SP3/SP3NewVersion/src/main/java/user.txt";
+    private static  String fileName = "/Users/mingo/Documents/GitHub/SP3/SP3NewVersion/src/main/java/user.txt";// til login
+    private static  String personalList = "";// til login
 
     public void ConsoleLogin() {
+
         Scanner scanner = new Scanner(System.in);
         while (true) {
             System.out.println("1. Login");
@@ -41,7 +41,6 @@ private List<Media> medias;
             }
         }
     }
-
     private static void login(Scanner scanner) {
         System.out.print("Enter username: ");
         String username = scanner.nextLine();
@@ -49,7 +48,7 @@ private List<Media> medias;
         System.out.print("Enter password: ");
         String password = scanner.nextLine();
 
-        if (validateLogin(username, password)) {
+        if (checkLogin(username, password)) {
             System.out.println("Login successful!");
             displayMenu();
         } else {
@@ -64,13 +63,12 @@ private List<Media> medias;
         System.out.print("Enter a new password: ");
         String password = scanner.nextLine();
 
-        // Save the registration information to a file (insecure for demo purposes)
         saveRegistration(username, password);
 
         System.out.println("Registration successful!");
     }
 
-    private static boolean validateLogin(String username, String password) {
+    private static boolean checkLogin(String username, String password) {
 
         try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
             String line;
@@ -97,10 +95,10 @@ private List<Media> medias;
     }
 
     private static void displayMenu() {
-        User user = new User("james");
+        User user = new User("");
         Scanner scan = new Scanner(System.in);
         while (true) {
-            System.out.println("1. see all movies");
+            System.out.println("1. see all Medias");
             System.out.println("2. Pick a movie");
             System.out.println("3. Pick a series");
             System.out.println("4. Show watch list");
@@ -114,12 +112,15 @@ private List<Media> medias;
                     for (Media movies: movieData) {
                         System.out.println(movies.toString());
                     }
+                    for (Media series: seriesData){
+                        System.out.println(series.toString());
+                    }
                     break;
                 case 2:
-                    addMovieToList(scan,user);
+                    addMediaToList(scan,user);
                     break;
                 case 3:
-
+                    addMediaToList(scan,user);
                     break;
                 case 4:
                     System.out.println(user.watchList);
@@ -146,23 +147,28 @@ private List<Media> medias;
         String input = scan.nextLine();
         return input;
     }
-    private static void addMovieToList(Scanner scanner, User user) {
+    private static void addMediaToList(Scanner scanner, User user) {
         // Display available movies or get the selected movie from your data
-        System.out.println("Select a movie to add to your list:");
+        System.out.println("Select a movie or series to add to your list:");
         for (Media movie : movieData) {
-            System.out.println(movie.getTitle()); // Assuming Media class has getTitle() method
+            System.out.println(movie.getTitle());
+        }
+        for(Media series: seriesData){
+            System.out.println(series.getTitle());
         }
 
-        System.out.print("Enter the title of the movie you want to add: ");
+        System.out.print("Enter the title of the movie or series you want to add: ");
         String selectedMovieTitle = scanner.nextLine();
+        String selectedSeriesTitle = scanner.nextLine();
 
         // Find the selected movie from the data
         Media selectedMovie = findMovieByTitle(selectedMovieTitle);
+        Media selectedSeries = findSeriesByTitle(selectedSeriesTitle);
 
         // Check if the movie is found
-        if (selectedMovie != null) {
-            // Prompt the user to choose which list to add the movie to
-            System.out.println("Select a list to add the movie to:");
+        if (selectedMovie != null || selectedSeries!=null) {
+            // have the user to choose which list to add the movie to
+            System.out.println("Select a list to add the media to:");
             System.out.println("1. Watch List");
             System.out.println("2. Saved Media List");
             System.out.print("Enter the number of the list: ");
@@ -173,12 +179,19 @@ private List<Media> medias;
             // Add the movie to the selected list
             switch (listChoice) {
                 case 1:
-                    user.addMediaToWatchList(selectedMovie);
+                    user.addMediaToWatchList(selectedMovie,selectedSeries);
+                    //user.addMediaToWatchList(selectedSeries);
                     break;
                 case 2:
                     user.saveMedia(selectedMovie);
-                    System.out.println("Added '" + selectedMovie.getTitle() + "' to your saved media list.");
-                    break;
+                    user.saveMedia(selectedSeries);
+                    if(user.equals(selectedMovie)){
+                        System.out.println("Added '" + selectedMovie.getTitle() + "' to your saved media list.");
+                        break;
+                    }else {
+                        System.out.println("Added '" + selectedSeries.getTitle() + "' to your saved media list.");
+                        break;
+                    }
                 default:
                     System.out.println("Invalid choice. Movie not added to any list.");
             }
@@ -197,5 +210,13 @@ private List<Media> medias;
         }
         return null;
     }
-
+    private static Media findSeriesByTitle(String title) {
+        // Implement a method to find the movie by title in your movieData
+        for (Media series : seriesData) {
+            if (series.getTitle().equalsIgnoreCase(title)) {
+                return series;
+            }
+        }
+        return null;
+    }
 }

@@ -1,11 +1,12 @@
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Scanner;
 
 public class FileIO implements Data {
     @Override
-    public ArrayList<Media> readFile(String fileName) {
+    public ArrayList<Media> readFile(String fileName,String type) {
         ArrayList<Media> data = new ArrayList<>();
         File file = new File(fileName);
 
@@ -23,9 +24,17 @@ public class FileIO implements Data {
                     genres.add(genre);
                 }
                 String rating = parts[3];
+                Media media=null;
+            if(type.equals("movie")){
+                 media = new Movie(title, releaseDate, genres, rating);// se her for hvordan det bliver splittet.
+            }else{
+                String season = Arrays.toString(parts[4].split("-"));
 
-                Media media = new Media(title, releaseDate, genres, rating);
-                data.add(media);
+                //String episode = Arrays.toString(parts[5].split(","));
+                 media=new Series(title, releaseDate, genres, rating,season);
+            }
+            data.add(media);
+
             }
         } catch (FileNotFoundException e) {
             System.out.println("file not found");
