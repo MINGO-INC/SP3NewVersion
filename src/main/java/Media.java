@@ -5,23 +5,34 @@ public class Media {
     private ArrayList<String> genres=new ArrayList<>();
     private String releasDate;
     private String rating;
+    private int number;
     Media(String title, String releasDate,ArrayList<String> genres,String rating){
         this.title=title;
         this.releasDate=releasDate;
         this.genres=genres;
         this.rating=rating;
     }
-
+public int getNumber(){
+        return number;
+}
     public String getTitle() {
         return title;
     }
     public String toString() {
-        return "this movie{" +
-                "title='" + title + '\'' +
-                ", genres=" + genres +
-                ", releasDate='" + releasDate + '\'' +
-                ", rating=" + rating +
-                '}';
+        return this.title + ", " + this.releasDate + ", " + "categories: " + showCategories() + rating;
+    }
+
+
+    public ArrayList<String> getGenres() {
+        return genres;
+    }
+
+    public String getReleasDate() {
+        return releasDate;
+    }
+
+    public String getRating() {
+        return rating;
     }
 
     public String showCategories(){

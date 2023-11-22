@@ -10,9 +10,12 @@ private String name;
 
     public void addMedia(Media media){
     watchList.add(media);
-    saveMedia.add(media);
     }
 
+    public void saveMedia(Media media){
+        saveMedia.add(media);
+
+    }
     public void removeMedia(Media media){
     watchList.add(media);
     saveMedia.add(media);
