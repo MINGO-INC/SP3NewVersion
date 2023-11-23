@@ -1,5 +1,5 @@
 import java.util.ArrayList;
-public class Series extends Media{
+public class Series extends Media {
 
     private String totalSeasons;
     private String totalEpisodes;
@@ -10,7 +10,7 @@ public class Series extends Media{
         this.totalEpisodes = totalEpisodes;
     }
 
-    private String getTotalEpisodes(){
+    public String getTotalEpisodes() {
         return totalEpisodes;
 
     }
@@ -19,10 +19,28 @@ public class Series extends Media{
         return totalSeasons;
     }
 
+/*
     @Override
     public String toString() {
-        return getTitle() + ", " + getReleasDate() + ", " + "categories: " + showCategories() +", Rating.  " + getRating()+totalSeasons;
+        return getTitle() + ", " + getReleasDate() + ", " + "categories: " + showCategories() +"Rating: " + getRating() +
+                ", Total seasons"+totalSeasons;
 
     }
+
+
+ */
+
+    @Override
+    public String toString() {
+        return String.format("Title: %s\n" +
+                        "Release Date: %s\n" +
+                        "Genres: %s\n" +
+                        "Rating: %s\n" +
+                        "Total Seasons: %s\n",
+                getTitle(), getReleasDate(), showCategories(), getRating(), getTotalSeasons());
+    }
+
 }
+
+
 

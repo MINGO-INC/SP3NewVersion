@@ -17,7 +17,7 @@ public class Media {
         return title;
     }
     public String toString() {
-        return this.title + ", " + this.releasDate + ", " + "categories: " + showCategories() + rating;
+        return this.title + ", " + this.releasDate + ", " + "categories: " + showCategories() + rating+"\n";
     }
 
 

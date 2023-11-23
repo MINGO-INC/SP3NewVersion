@@ -2,6 +2,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Scanner;
 
 public class FileIO implements Data {
@@ -23,6 +24,21 @@ public class FileIO implements Data {
                 for (String genre: genreParts){
                     genres.add(genre);
                 }
+
+             /*   for(String seasonInfo: genreParts){
+                    String[] seasonAndEpisodes = seasonInfo.split("-");
+                    int seasonNumber = Integer.parseInt(seasonAndEpisodes[0].trim());
+                    String[] episodeNum = seasonAndEpisodes[1].split(" ");
+                    List<Series> episodes = new ArrayList<>();
+
+                    for(String episodeNumbers: episodeNum){
+
+                    }
+                }*/
+
+
+
+
                 String rating = parts[3];
                 Media media=null;
             if(type.equals("movie")){

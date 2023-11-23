@@ -4,11 +4,11 @@ public class Main {
 
 
 
-        StreamingService streamingService=new StreamingService();
-        streamingService.ConsoleLogin();
-    //todo series lav det til en map<>list
-    // todo fix null print i consol
-    //todo fix at man skal vælge 2 film/serier for at fortsætte
-    //todo sørg for at valget i menuen kun viser det ønskede
+    StreamingService streamingService=new StreamingService();
+    streamingService.ConsoleLogin();
+    //todo gør det muligt at søge efter genre
+        //todo lave en "now you are watching" function.
+        //todo fix series printline
+        //todo hvis vi har tid - lav en "remove from list" option
     }
 }

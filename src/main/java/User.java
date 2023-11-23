@@ -44,16 +44,10 @@ private String name;
     public ArrayList<Media> getAllMedia() {
         return allMedia;
     }
-    public void addMediaToWatchList(Media movie,Media series) {
-        watchList.add(movie);
-        watchList.add(series);
-        if (watchList.equals(movie)) {
-            System.out.println("Added '" + movie.getTitle() + "' to your watch list.");
-        }else{
-            System.out.println("Added '" + series.getTitle() + "' to your watch list.");
-        }
-    }
 
+    public void addMediaToWatchList(Media media) {
+        watchList.add(media);
+    }
     private List<Media> saveMediaList;
 
     public List<Media> getSaveMediaList() {

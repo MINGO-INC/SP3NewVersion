@@ -3,17 +3,19 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Scanner;
 
 public class StreamingService {
- private static FileIO fileIO = new FileIO();
-private List<Media> medias;
-  private static ArrayList<Media> movieData = fileIO.readFile("/Users/mingo/Documents/GitHub/SP3/SP3NewVersion/src/main/java/100bedstefilm.txt","movie");
-  private static ArrayList<Media> seriesData = fileIO.readFile("/Users/mingo/Documents/GitHub/SP3/SP3NewVersion/src/main/java/100bedsteserier.txt","series");
+    private static FileIO fileIO = new FileIO();
+    private static List<Media> medias;
+    private static ArrayList<Media> movieData = fileIO.readFile("/Users/mingo/Documents/GitHub/SP3/SP3NewVersion/src/main/java/100bedstefilm.txt", "movie");
+    private static ArrayList<Media> seriesData = fileIO.readFile("/Users/mingo/Documents/GitHub/SP3/SP3NewVersion/src/main/java/100bedsteserier.txt", "series");
 
-    private static  String fileName = "/Users/mingo/Documents/GitHub/SP3/SP3NewVersion/src/main/java/user.txt";// til login
-    private static  String personalList = "/Users/mingo/Documents/GitHub/SP3/SP3NewVersion/src/main/java/PersonalList.txt";
+    //private static ArrayList<Media> genres=fileIO.readFile("/Users/mingo/Documents/GitHub/SP3/SP3NewVersion/src/main/java/genres.txt","genres");
+    private static String fileName = "/Users/mingo/Documents/GitHub/SP3/SP3NewVersion/src/main/java/user.txt";// til login
+    private static String personalList = "/Users/mingo/Documents/GitHub/SP3/SP3NewVersion/src/main/java/PersonalList.txt";
 
     public void ConsoleLogin() {
 
@@ -41,6 +43,7 @@ private List<Media> medias;
             }
         }
     }
+
     private static void login(Scanner scanner) {
         System.out.print("Enter username: ");
         String username = scanner.nextLine();
@@ -93,11 +96,12 @@ private List<Media> medias;
         } catch (IOException e) {
         }
     }
-    private static void savePrivateList(Media list){
-        try(FileWriter writer = new FileWriter(personalList,true)){
-        writer.write(String.valueOf(list));
 
-        }catch(IOException e){
+    private static void savePrivateList(Media list) {
+        try (FileWriter writer = new FileWriter(personalList, true)) {
+            writer.write(String.valueOf(list));
+
+        } catch (IOException e) {
 
         }
     }
@@ -106,47 +110,60 @@ private List<Media> medias;
         User user = new User("");
         Scanner scan = new Scanner(System.in);
         while (true) {
-            System.out.println("1. see all Medias");
+            System.out.println("1. see all media");
             System.out.println("2. Pick a movie");
             System.out.println("3. Pick a series");
-            System.out.println("4. Show watch list");
-            System.out.println("5. Show saved media");
-            System.out.println("6. logout");
+            System.out.println("4. Search for a genre");
+            System.out.println("5. Show watch list");
+            System.out.println("6. Show saved media");
+            System.out.println("7. logout");
             System.out.print("Choose an option: ");
             int choice = scan.nextInt();
             scan.nextLine();
             switch (choice) {
                 case 1:
-                    for (Media movies: movieData) {
+                    for (Media movies : movieData) {
                         System.out.println(movies.toString());
                     }
-                    for (Media series: seriesData){
+                    for (Media series : seriesData) {
                         System.out.println(series.toString());
                     }
                     break;
                 case 2:
+                    for (Media movie : movieData) {
+                        System.out.println(movie.getTitle());
+                    }
                     addMediaToList(scan,user);
                     break;
                 case 3:
+                    for (Media series : seriesData) {
+                        System.out.println(series.getTitle());
+                    }
                     addMediaToList(scan,user);
                     break;
                 case 4:
+                    searchForGenre(scan);
+                    break;
+                case 5:
                     System.out.println(user.watchList);
 
                     break;
-                case 5:
+                case 6:
                     System.out.println(user.saveMedia);
                     break;
-                case 6:
+                case 7:
                     System.out.println("Exiting the program. Goodbye!");
                     System.exit(0);
+                    break;
+
                 default:
                     System.out.println("Invalid choice. try again.");
             }
         }
     }
-    public void playMovie(){
-        System.out.println("current movie is playing "+ "");
+
+    public void playMovie() {
+        System.out.println("current movie is playing " + "");
     }
 
     public static String getInput(String msg) {
@@ -155,28 +172,19 @@ private List<Media> medias;
         String input = scan.nextLine();
         return input;
     }
+
     private static void addMediaToList(Scanner scanner, User user) {
         // Display available movies or get the selected movie from your data
-        //todo lav den her del af koden til en if statement.
-        System.out.println("Select a movie or series to add to your list:");
-        for (Media movie : movieData) {
-            System.out.println(movie.getTitle());
-        }
-        for(Media series: seriesData){
-            System.out.println(series.getTitle());
-        }
-
         System.out.print("Enter the title of the movie or series you want to add: ");
-        String selectedMovieTitle = scanner.nextLine();
-        String selectedSeriesTitle = scanner.nextLine();
+        String selectedTitle = scanner.nextLine();
 
         // Find the selected movie from the data
-        Media selectedMovie = findMovieByTitle(selectedMovieTitle);
-        Media selectedSeries = findSeriesByTitle(selectedSeriesTitle);
+        Media selectedMovie = findMovieByTitle(selectedTitle);
+        Media selectedSeries = findSeriesByTitle(selectedTitle);
 
         // Check if the movie is found
-        if (selectedMovie != null && selectedSeries!=null) {
-            // have the user to choose which list to add the movie to
+        if (selectedMovie != null || selectedSeries != null) {
+            // have the user choose which list to add the media to
             System.out.println("Select a list to add the media to:");
             System.out.println("1. Watch List");
             System.out.println("2. Saved Media List");
@@ -188,24 +196,28 @@ private List<Media> medias;
             // Add the movie to the selected list
             switch (listChoice) {
                 case 1:
-                    user.addMediaToWatchList(selectedMovie,selectedSeries);
-                    //user.addMediaToWatchList(selectedSeries);
+                    if (selectedMovie != null) {
+                        user.addMediaToWatchList(selectedMovie);
+                        System.out.println("Added '" + selectedMovie.getTitle() + "' to your watch list.");
+                    } else if (selectedSeries != null) {
+                        user.addMediaToWatchList(selectedSeries);
+                        System.out.println("Added '" + selectedSeries.getTitle() + "' to your watch list.");
+                    }
                     break;
                 case 2:
-
-                    user.saveMedia(selectedMovie);
-                    user.saveMedia(selectedSeries);
-                    if(user.equals(selectedMovie)){
+                    if (selectedMovie != null) {
+                        user.saveMedia(selectedMovie);
                         System.out.println("Added '" + selectedMovie.getTitle() + "' to your saved media list.");
-                    }else {
+                    } else if (selectedSeries != null) {
+                        user.saveMedia(selectedSeries);
                         System.out.println("Added '" + selectedSeries.getTitle() + "' to your saved media list.");
-                        break;
                     }
+                    break;
                 default:
-                    System.out.println("Invalid choice. Movie not added to any list.");
+                    System.out.println("Invalid choice. Media not added to any list.");
             }
         } else {
-            System.out.println("Movie not found.");
+            System.out.println("Media not found.");
         }
     }
 
@@ -219,6 +231,7 @@ private List<Media> medias;
         }
         return null;
     }
+
     private static Media findSeriesByTitle(String title) {
         // Implement a method to find the movie by title in your movieData
         for (Media series : seriesData) {
@@ -229,4 +242,36 @@ private List<Media> medias;
         return null;
     }
 
-}
+
+    private static void searchForGenre(Scanner scanner) {
+        boolean found = false;
+        System.out.println("Enter the genre you want to browse through");
+        String searchedGenre = scanner.nextLine();
+
+        System.out.println("Media in " + searchedGenre + " :");
+        for (Media movie : movieData) {
+            for (String s : movie.getGenres()) {
+                if (s.trim().equalsIgnoreCase(searchedGenre.trim())) {
+                    System.out.println(movie.toString());
+                    found = true;
+                }
+            }
+        }
+
+        for (Media series : seriesData) {
+            for (String s : series.getGenres()) {
+                if (s.trim().equalsIgnoreCase(searchedGenre.trim())) {
+                    System.out.println(series.toString());
+                    found = true;
+                }
+            }
+        }
+
+            if (!found) {
+                System.out.println("Nothing found in the searched genre");
+            } else {
+                System.out.println("Media search for '" + searchedGenre + "' completed.");
+            }
+
+        }
+    }
