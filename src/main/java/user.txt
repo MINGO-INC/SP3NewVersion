@@ -1,3 +1,6 @@
-League,legends
+jeppe,jeppe
+jeppe,jeppe
+Mingo,Mingo
 Mingo,Flamingo
-a,b
+Ali,Baba
+Jeppe,jeppe

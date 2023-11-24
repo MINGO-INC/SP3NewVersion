@@ -12,23 +12,10 @@ public class Series extends Media {
 
     public String getTotalEpisodes() {
         return totalEpisodes;
-
     }
-
     private String getTotalSeasons() {
         return totalSeasons;
     }
-
-/*
-    @Override
-    public String toString() {
-        return getTitle() + ", " + getReleasDate() + ", " + "categories: " + showCategories() +"Rating: " + getRating() +
-                ", Total seasons"+totalSeasons;
-
-    }
-
-
- */
 
     @Override
     public String toString() {

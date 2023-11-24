@@ -27,11 +27,10 @@ public class FileIO implements Data {
                 String rating = parts[3];
                 Media media=null;
             if(type.equals("movie")){
-                 media = new Movie(title, releaseDate, genres, rating);// se her for hvordan det bliver splittet.
+                 media = new Movie(title, releaseDate, genres, rating);
             }else{
                 String season = Arrays.toString(parts[4].split("-"));
 
-                //String episode = Arrays.toString(parts[5].split(","));
                  media=new Series(title, releaseDate, genres, rating,season);
             }
             data.add(media);

@@ -8,14 +8,9 @@ import java.util.Scanner;
 
 public class StreamingService {
     private static FileIO fileIO = new FileIO();
-    private static List<Media> medias;
     private static ArrayList<Media> movieData = fileIO.readFile("/Users/mingo/Documents/GitHub/SP3/SP3NewVersion/src/main/java/100bedstefilm.txt", "movie");
     private static ArrayList<Media> seriesData = fileIO.readFile("/Users/mingo/Documents/GitHub/SP3/SP3NewVersion/src/main/java/100bedsteserier.txt", "series");
-
-    //private static ArrayList<Media> genres=fileIO.readFile("/Users/mingo/Documents/GitHub/SP3/SP3NewVersion/src/main/java/genres.txt","genres");
     private static String fileName = "/Users/mingo/Documents/GitHub/SP3/SP3NewVersion/src/main/java/user.txt";// til login
-    private static String personalList = "/Users/mingo/Documents/GitHub/SP3/SP3NewVersion/src/main/java/PersonalList.txt";
-
     public static void ConsoleLogin() {
 
         Scanner scanner = new Scanner(System.in);
@@ -90,20 +85,11 @@ public class StreamingService {
     }
 
     private static void saveRegistration(String username, String password) {
-        try (FileWriter writer = new FileWriter(fileName, true)) {
+        try (FileWriter writer = new FileWriter(fileName,true)) {
             writer.write(username + "," + password + "\n");
         } catch (IOException e) {
         }
     }
-
-  /*  private static void savePrivateList(Media list) {
-        try (FileWriter writer = new FileWriter(personalList, true)) {
-            writer.write(String.valueOf(list));
-
-        } catch (IOException e) {
-
-        }
-    }*/
 
     private static void displayMenu() {
         User user = new User("");
@@ -132,7 +118,6 @@ public class StreamingService {
                     for (Media movie : movieData) {
                         System.out.println(movie.getTitle());
                     }
-                   playMovie(scan,user);
                     addMediaToList(scan,user);
                     break;
                 case 3:
@@ -150,7 +135,7 @@ public class StreamingService {
                     break;
                 case 6:
                     System.out.println(user.saveMedia);
-                    removeFromSavedList(scan,user);
+                    removeMediaFromSavedList(scan,user);
                     break;
                 case 7:
                     ConsoleLogin();
@@ -158,33 +143,19 @@ public class StreamingService {
                 default:
                     System.out.println("Invalid choice. try again.");
             }
+
         }
     }
 
-    public static void playMovie(Scanner scan, User user) {
-        System.out.println("current movie is playing " + "");
-    }
-
-   /* public static String getInput(String msg) {
-        Scanner scan = new Scanner(System.in);
-        System.out.println(msg);
-        String input = scan.nextLine();
-        return input;
-    }
-    */
 
     private static void addMediaToList(Scanner scanner, User user) {
-        // Display available movies or get the selected movie from your data
         System.out.print("Enter the title of the movie or series you want to add: ");
         String selectedTitle = scanner.nextLine();
 
-        // Find the selected movie from the data
         Media selectedMovie = findMovieByTitle(selectedTitle);
         Media selectedSeries = findSeriesByTitle(selectedTitle);
 
-        // Check if the movie is found
         if (selectedMovie != null || selectedSeries != null) {
-            // have the user choose which list to add the media to
             System.out.println("Choose an option: ");
             System.out.println("1. Play movie");
             System.out.println("2. Add to Watch List");
@@ -192,9 +163,8 @@ public class StreamingService {
             System.out.print("Enter the number of the list: ");
 
             int listChoice = scanner.nextInt();
-            scanner.nextLine(); // Consume the newline character
+            scanner.nextLine();
 
-            // Add the movie to the selected list
             switch (listChoice) {
                 case 1:
                     if(selectedMovie !=null) {
@@ -232,17 +202,15 @@ public class StreamingService {
         }
     }
     private static Media findMovieByTitle(String title) {
-        // Implement a method to find the movie by title in your movieData
         for (Media movie : movieData) {
             if (movie.getTitle().equalsIgnoreCase(title)) {
                 return movie;
             }
         }
-        return null;
+    return null;
     }
 
     private static Media findSeriesByTitle(String title) {
-        // Implement a method to find the movie by title in your movieData
         for (Media series : seriesData) {
             if (series.getTitle().equalsIgnoreCase(title)) {
                 return series;
@@ -250,15 +218,26 @@ public class StreamingService {
         }
         return null;
     }
-    private static void removeFromSavedList(Scanner scanner, User user){
-        System.out.print("pick what media to remove");
-        String input=scanner.nextLine();
-        Media seriesByTitle = findSeriesByTitle(input);
-        if(seriesByTitle !=null){
-            user.removeMedia(seriesByTitle);
-            System.out.println("you have now removed: "+seriesByTitle+" from saved list");
-        }else{
-            System.out.println("Media not found in the saved list.");
+
+    private static void removeMediaFromSavedList(Scanner scanner, User user){
+        System.out.println("Do you want to remove a media from watch list? (y/n)");
+        String input1 = scanner.nextLine();
+
+        if(input1.equalsIgnoreCase("y")){
+            System.out.println("Enter the title of the media to remove: ");
+            String input = scanner.nextLine();
+
+            Media seriesToRemove = findSeriesByTitle(input);
+            Media moviesToRemove = findMovieByTitle(input);
+
+            if(user.getSaveMedia().contains(seriesToRemove) || user.getSaveMedia().contains(moviesToRemove)){
+            user.removeMedia(seriesToRemove,moviesToRemove);
+                System.out.println(input + " has now been removed from your list");
+            } else{
+                System.out.println("Media not found in your list");
+                displayMenu();
+
+            }
         }
     }
 

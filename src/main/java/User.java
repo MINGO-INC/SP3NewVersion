@@ -18,18 +18,18 @@ private String name;
 
     }
 
-    public void removeMedia(Media media){
-        if(saveMedia.contains(media)){
-            saveMedia.remove(media);
-            System.out.println("Removed " + media.getTitle());
-        } else {
-            System.out.println("Media not in your list");
+    public void  removeMedia(Media seriesToRemove, Media movieToRemove){
+        if(saveMedia.contains(seriesToRemove)){
+            saveMedia.remove(seriesToRemove);
+            System.out.println("Removed " + seriesToRemove.getTitle()+ " from your list");
+        } else if(saveMedia.contains(movieToRemove)) {
+            saveMedia.remove(movieToRemove);
+            System.out.println("Removed " + movieToRemove.getTitle()+ " from your list");
+        } else{
+            System.out.println("Media not found in your list");
         }
-
-
-        watchList.remove(media);
-    saveMedia.remove(media);
     }
+
 
 
 
@@ -59,6 +59,18 @@ private String name;
     public void addMediaToWatchList(Media media) {
         watchList.add(media);
     }
+
+    public ArrayList<Media> searchBySpecfikNameInPersonalList(String s){
+        ArrayList<Media> searchResult = new ArrayList<>();
+        for (Media media: saveMedia){
+            if(media.getTitle().equalsIgnoreCase(s)){
+                searchResult.add(media);
+                }
+        }
+        return searchResult;
+    }
+
+
     private List<Media> saveMediaList;
 
     public List<Media> getSaveMediaList() {
