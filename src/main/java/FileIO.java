@@ -21,24 +21,9 @@ public class FileIO implements Data {
                 String releaseDate = parts[1];
                 ArrayList <String> genres = new ArrayList<>();
                 String[] genreParts = parts[2].split(",");
-                for (String genre: genreParts){
+                for (String genre: genreParts) {
                     genres.add(genre);
                 }
-
-             /*   for(String seasonInfo: genreParts){
-                    String[] seasonAndEpisodes = seasonInfo.split("-");
-                    int seasonNumber = Integer.parseInt(seasonAndEpisodes[0].trim());
-                    String[] episodeNum = seasonAndEpisodes[1].split(" ");
-                    List<Series> episodes = new ArrayList<>();
-
-                    for(String episodeNumbers: episodeNum){
-
-                    }
-                }*/
-
-
-
-
                 String rating = parts[3];
                 Media media=null;
             if(type.equals("movie")){
@@ -58,14 +43,5 @@ public class FileIO implements Data {
         return data;
     }
 
-    /*
-    public void movieData(ArrayList<Media> media){
-    try{
-        File file = new File("/Users/jeppekoch/Desktop/GitHub/SP3/SP3_Domain/src/100bedstefilm.txt");
-
-    } catch (Exception e) {
-        System.out.println("file not found");
-    }
-*/
     }
 

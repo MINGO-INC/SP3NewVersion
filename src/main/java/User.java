@@ -17,10 +17,21 @@ private String name;
         saveMedia.add(media);
 
     }
+
     public void removeMedia(Media media){
-    watchList.add(media);
-    saveMedia.add(media);
+        if(saveMedia.contains(media)){
+            saveMedia.remove(media);
+            System.out.println("Removed " + media.getTitle());
+        } else {
+            System.out.println("Media not in your list");
+        }
+
+
+        watchList.remove(media);
+    saveMedia.remove(media);
     }
+
+
 
     public User(String name) {
         this.name = name;
